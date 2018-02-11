@@ -1,0 +1,16 @@
+{% extends 'base_layout.html' %}
+{% block content%}
+
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <h1>Creacion de Usuario</h1>
+    <form class ='formularios' method='post' action="{% url 'WebConcursos:registro' %}">
+        {% csrf_token %}
+	     {{formulario_registro}}
+	     <p><input class="btn btn-primary my-2" type='submit' value='Registrar'/></p>
+	  </form>
+    {% if messages %}
+        {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock%}

@@ -3,7 +3,6 @@ from django.http import *
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .import forms
 from django.contrib.auth.decorators import login_required
@@ -13,25 +12,28 @@ from django.contrib import messages
 # Create your views here.
 #registrar usuarios: metodo usado para crear el usuario en la aplicacion
 def form_registrar_usuario(request):
-	print("Formulario metodo post")
 	if request.method == 'POST':
-		formulario_registro = UserCreationForm(request.POST)
+		print(request.POST)
+		formulario_registro = forms.UserRegisterFormCustom(request.POST)
+		print(formulario_registro.errors.as_data())
 		if formulario_registro.is_valid():
-			print(request.POST.get('username'))
+			print("Formulario valido")
 			patron_correo = re.compile(r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
 			cumple_patron = patron_correo.match(request.POST.get('username'))
 			print(cumple_patron)
 			if cumple_patron:
-				#guarda el usuario en la base de datos
-				user = formulario_registro.save()
+				user = formulario_registro.save(commit=False) #crea el elemnto, lo captura sin dar commit para modificar campos
+				user.save()
 				login(request,user)
 				messages.success(request, 'Gracias por registrarte!!!!!')
-				return redirect('agenda_eventos:login') #Lo envio a la pantalla de ingreso de usuarios ya registrados
+				messages.success(request, 'El username para ingreso a la aplicacion es ')
+				messages.success(request, user.username)
+				return redirect('WebConcursos:login') #Lo envio a la pantalla de ingreso de usuarios ya registrados
 			else:
 				messages.info(request, 'El registro debe realizarse con un correo electronico valido')
 	else:
 		print("Formulario en blanco para creacion de usuario")
-		formulario_registro = UserCreationForm()
+		formulario_registro = forms.UserRegisterFormCustom()
 	return render(request,'nuevo_usuario.html',{'formulario_registro':formulario_registro})
 
 #login

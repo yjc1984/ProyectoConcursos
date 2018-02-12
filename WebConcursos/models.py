@@ -35,5 +35,3 @@ class Locutor(models.Model):
     email = models.EmailField(max_length=200)
     #id_audio = models.ForeignKey(Audio,on_delete=models.CASCADE)
     observaciones = models.CharField(max_length=2000)
-
-###modificacion para hacer prueba de merge pablo...esta registraddo en branch pablo

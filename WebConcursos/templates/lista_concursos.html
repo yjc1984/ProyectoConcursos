@@ -1,0 +1,31 @@
+{% extends 'base_layout.html' %}
+  {% block content%}
+    <h1>Lista de Concursos</h1>
+    <div>
+      <p>Bienvenido! Estimado Usuario : {{ nombre_usuario }}  {{ apellido_usuario }} </p>
+      <p>Esta es la lista de concursos</p>
+    </div>
+    <div>
+       <table class="table table-hover table-sm">
+        <thead class="thead-inverse">
+        <tr>
+          <!--<th>Id</th>-->
+          <th>Nombre Concurso</th>
+          <th>Fecha Inicio</th>
+          <th>Borrar Concurso</th>
+          <th>Editar Concurso</th>
+        </tr>
+      </thead>
+       <tbody>
+        </tbody>
+        </table>
+    </div>
+    <div class = "opciones">
+      <form method='get' action="{% url 'WebConcursos:logout' %}">
+        {% csrf_token %}
+        <input class="btn btn-primary my-2" type='submit' value='Logout'/>
+      </form>
+    </div>
+{% endblock%}
+<!--  </body>
+</html>-->

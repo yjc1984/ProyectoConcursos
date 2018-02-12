@@ -8,6 +8,7 @@ from .import forms
 from django.contrib.auth.decorators import login_required
 import re
 from django.contrib import messages
+from .models import Concurso
 
 # Create your views here.
 #registrar usuarios: metodo usado para crear el usuario en la aplicacion
@@ -46,7 +47,7 @@ def formulario_ingresar_usuario(request):
 			login(request,user) #usado para quedar loqueado en la aplicacion de admin
 			#eventos = Evento.objects.filter(username = user).order_by('fecha_inicio') #envio solo eventos del usuario login
 			#return render(request, 'lista_eventos.html', {'eventos':eventos, 'usuario': user})
-			return redirect('agenda_eventos:lista_eventos') #hacia urls.py para name = lista_eventos
+			return redirect('WebConcursos:lista_concursos') #hacia urls.py para name = lista_eventos
 	else:
 		formulario_ingreso = AuthenticationForm()
 	return render(request,'login.html',{'formulario_ingreso':formulario_ingreso})
@@ -55,3 +56,11 @@ def formulario_ingresar_usuario(request):
 def logout_view(request):
 	logout(request)
 	return redirect('WebConcursos:login') #hacia urls.py para name = lista_eventos
+
+#Ordena los eventos por la fecha de inicio del mismo
+def traer_lista_concursos(request):
+	id_usuario = User.objects.get(username = request.user).id
+	nombre_usuario = User.objects.get(username = request.user).first_name
+	apellido_usuario = User.objects.get(username = request.user).last_name
+	concursos = Concurso.objects.filter(id_administrador = id_usuario).order_by('fecha_inicio')
+	return render(request, 'lista_concursos.html', {'concursos':concursos , 'nombre_usuario':nombre_usuario, 'apellido_usuario':apellido_usuario})

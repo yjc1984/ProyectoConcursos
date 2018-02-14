@@ -6,20 +6,12 @@ from WebConcursos import models
 from django.contrib.auth import password_validation
 
 class UserRegisterFormCustom(UserCreationForm):
-    first_name = forms.CharField(required = True)
-    last_name = forms.CharField(required = True)
-    #username = forms.EmailField(required=True)
-    password1 = forms.CharField(strip=False,widget=forms.PasswordInput,)
-    password2 = forms.CharField(strip=False,widget=forms.PasswordInput,)
-
     class Meta:
         model = UsuarioCustom
-        fields = ('username','password1','password2', 'first_name','last_name',)
+        fields = ('first_name','last_name', 'Rol','Empresa','username','password1','password2',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # set the user_id as an attribute of the form
-        #self.user_id = user_id
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -33,8 +25,6 @@ class UserRegisterFormCustom(UserCreationForm):
 
     def _post_clean(self):
         super()._post_clean()
-        # Validate the password after self.instance is updated with form data
-        # by super().
         password = self.cleaned_data.get('password2')
         if password:
             try:

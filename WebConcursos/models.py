@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User, AbstractUser, AnonymousUser
+from django.db.models.signals import post_save
 
 # Create your models here.
 
@@ -39,9 +40,14 @@ class Locutor(models.Model):
 
 
 class UsuarioCustom(AbstractUser):
-    user  = models.OneToOneField(User, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.user.username
+    #Se deben crear los mismos campos que se enviaran desde la forma pues deben ser almacenados, de lo contrario falla
+    user = models.AutoField(auto_created=True, primary_key=True)
+    Empresa = models.CharField(max_length=200, blank=True)
+    Rol = models.CharField(max_length=200, blank=True)
+    username = models.CharField(max_length=200, blank=True)
+    first_name = models.CharField(max_length=200, blank=True)
+    last_name = models.CharField(max_length=200, blank=True)
+
     @property
     def user_permissions(self):
         return self._user_permissions
@@ -49,3 +55,5 @@ class UsuarioCustom(AbstractUser):
     @property
     def groups(self):
         return self._groups
+
+    USERNAME_FIELD = 'username'

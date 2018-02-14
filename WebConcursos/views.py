@@ -13,18 +13,15 @@ from .models import Concurso
 # Create your views here.
 #registrar usuarios: metodo usado para crear el usuario en la aplicacion
 def form_registrar_usuario(request):
+	print(request.POST.get('username'))
 	if request.method == 'POST':
-		print("PETICION:")
-		print(request.POST)
 		formulario_registro = forms.UserRegisterFormCustom(request.POST)
-		print("ERRORES EN FORMULARIO:")
-		print(formulario_registro.errors.as_data())
-		print("FORMULARIO VALIDO:")
+		print(request.POST)
 		print(formulario_registro.is_valid())
-
+		formulario_registro.errors.as_data()
 		if formulario_registro.is_valid():
 			print("Formulario valido")
-			formulario_registro.user_id = 1
+			print(request.POST.get('username'))
 			patron_correo = re.compile(r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
 			cumple_patron = patron_correo.match(request.POST.get('username'))
 			print(cumple_patron)
@@ -70,3 +67,19 @@ def traer_lista_concursos(request):
 	apellido_usuario = User.objects.get(username = request.user).last_name
 	concursos = Concurso.objects.filter(id_administrador = id_usuario).order_by('fecha_inicio')
 	return render(request, 'lista_concursos.html', {'concursos':concursos , 'nombre_usuario':nombre_usuario, 'apellido_usuario':apellido_usuario})
+
+
+
+def form_empleado(request):
+	if request.method == 'POST':
+		formulario_registro = forms.FormEmployee(request.POST)
+		if formulario_registro.is_valid():
+			print("Formulario valido")
+			user = formulario_registro.save(commit=False) #crea el elemnto, lo captura sin dar commit para modificar campos
+			user.save()
+			return redirect('WebConcursos:login') #Lo envio a la pantalla de ingreso de usuarios ya registrados
+		else:
+			messages.info(request, 'El registro debe realizarse con un correo electronico valido')
+	else:
+		formulario_registro = forms.FormEmployee()
+	return render(request,'nuevo_usuario.html',{'formulario_registro':formulario_registro})

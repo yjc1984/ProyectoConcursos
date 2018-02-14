@@ -14,11 +14,17 @@ from .models import Concurso
 #registrar usuarios: metodo usado para crear el usuario en la aplicacion
 def form_registrar_usuario(request):
 	if request.method == 'POST':
+		print("PETICION:")
 		print(request.POST)
 		formulario_registro = forms.UserRegisterFormCustom(request.POST)
+		print("ERRORES EN FORMULARIO:")
 		print(formulario_registro.errors.as_data())
+		print("FORMULARIO VALIDO:")
+		print(formulario_registro.is_valid())
+
 		if formulario_registro.is_valid():
 			print("Formulario valido")
+			formulario_registro.user_id = 1
 			patron_correo = re.compile(r"^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$")
 			cumple_patron = patron_correo.match(request.POST.get('username'))
 			print(cumple_patron)

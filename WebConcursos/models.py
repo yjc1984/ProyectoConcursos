@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser, AnonymousUser
 
 # Create your models here.
 
@@ -35,3 +35,17 @@ class Locutor(models.Model):
     email = models.EmailField(max_length=200)
     #id_audio = models.ForeignKey(Audio,on_delete=models.CASCADE)
     observaciones = models.CharField(max_length=2000)
+
+
+
+class UsuarioCustom(AbstractUser):
+    user  = models.OneToOneField(User, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.user.username
+    @property
+    def user_permissions(self):
+        return self._user_permissions
+
+    @property
+    def groups(self):
+        return self._groups

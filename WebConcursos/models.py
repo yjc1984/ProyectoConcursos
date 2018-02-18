@@ -5,22 +5,6 @@ from django.db.models.signals import post_save
 
 # Create your models here.
 
-class Concurso(models.Model):
-
-    # Definicion atributos
-
-    nombre = models.CharField(max_length=200)
-    ruta_imagen = models.ImageField(max_length=500)
-    url_concurso = models.URLField(max_length=200)
-    fecha_inicio = models.DateTimeField(default=timezone.now)
-    fecha_fin = models.DateTimeField(blank=True, null=True)
-    fecha_creacion = models.DateTimeField(default=timezone.now)
-    valor_pagar = models.FloatField(max_length=200)
-    texto_voz = models.CharField(max_length=2000)
-    recomendaciones = models.CharField(max_length=2000)
-    estado = models.CharField(max_length=2000)
-    id_administrador = models.ForeignKey(User,on_delete=models.CASCADE)
-
 #class Audio(models.Model):
 
 
@@ -40,11 +24,15 @@ class Locutor(models.Model):
 
 
 class UsuarioCustom(AbstractUser):
+    ROLES = (
+                ('Administrador', 'Administrador'),
+                ('Marketing', 'Marketing'),
+    )
     #Se deben crear los mismos campos que se enviaran desde la forma pues deben ser almacenados, de lo contrario falla
-    user = models.AutoField(auto_created=True, primary_key=True)
+    id_administrador = models.AutoField(auto_created=True, primary_key=True)
+    username = models.CharField(max_length=200,unique=True)
     Empresa = models.CharField(max_length=200, blank=True)
-    Rol = models.CharField(max_length=200, blank=True)
-    username = models.CharField(max_length=200, blank=True)
+    Rol = models.CharField(max_length=200, blank=True, choices=ROLES)
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
 
@@ -56,4 +44,23 @@ class UsuarioCustom(AbstractUser):
     def groups(self):
         return self._groups
 
+    def user(self):
+        return self.username
+
     USERNAME_FIELD = 'username'
+
+class Concurso(models.Model):
+
+    # Definicion atributos
+
+    nombre = models.CharField(max_length=200)
+    #ruta_imagen = models.ImageField(null=True,max_length=500)
+    url_concurso = models.URLField(null=True,blank=False,max_length=200)
+    fecha_inicio = models.DateTimeField(blank=False)
+    fecha_fin = models.DateTimeField(blank=False)
+    fecha_creacion = models.DateTimeField(blank=True, default=timezone.now)
+    valor_pagar = models.IntegerField(max_length=200)
+    texto_voz = models.CharField(max_length=2000)
+    recomendaciones = models.CharField(max_length=2000)
+    estado = models.CharField(null=True,max_length=2000)
+    id_administrador = models.ForeignKey(User,on_delete=models.CASCADE)

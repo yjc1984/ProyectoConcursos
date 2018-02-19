@@ -1,8 +1,7 @@
 {% extends 'base_layout.html' %}
 {% block content%}
-    <h1>Detalle del Concurso</h1>
-
 {% for concurso in concurso %}
+  <h1>Bienvenidos al Concurso {{ concurso.nombre }} </h1>
     <div>
       <center>
           <img src="{{concurso.ruta_imagen}}">
@@ -28,24 +27,12 @@
             <td>{{ concurso.valor_pagar }}</td>
           <tr>
           <tr>
-            <th>Imagen Banner</th>
-            <td>{{ concurso.ruta_imagen}}</td>
-          <tr>
-          <tr>
             <th>Texto Voz</th>
             <td>{{ concurso.texto_voz }}</td>
           <tr>
           <tr>
             <th>Recomendaciones</th>
             <td>{{ concurso.recomendaciones }}</td>
-          <tr>
-          <tr>
-            <th>URL Concurso asignada por sistema</th>
-            <td><a href="{{ concurso.url_concurso }}">{{ concurso.url_concurso }}</a></td>
-          <tr>
-          <tr>
-            <th>URL configurada por usuario</th>
-            <td><a href="{% url 'WebConcursos:resolver' url_usuario=concurso.url_concurso_custom %}">{{concurso.url_concurso_custom }}</a></td>
           <tr>
           <tr>
             <th>Estado</th>
@@ -57,7 +44,7 @@
     <div>
       <form class ='formularios' method='post' action="{% url 'WebConcursos:lista_concursos' %}">
         {% csrf_token %}
-        <p><input class="btn btn-primary my-2" type='submit' value='Volver a lista'/></p>
+        <p><input class="btn btn-primary my-2" type='submit' value='Participar'/></p>
       </form>
     </div>
 {% endblock%}

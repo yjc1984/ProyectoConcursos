@@ -8,8 +8,9 @@ from .import forms
 from django.contrib.auth.decorators import login_required
 import re
 from django.contrib import messages
-from .models import Concurso, UsuarioCustom
+from .models import Concurso, UsuarioCustom, ListaLocutores
 from WebConcursos.forms import UserCreationCustom
+from django.core.mail import EmailMessage, send_mail
 
 # Create your views here.
 #registrar usuarios: metodo usado para crear el usuario en la aplicacion
@@ -163,3 +164,66 @@ def cargar(request):
 	else:
 		formulario_ingreso = forms.UploadFileForm()
 	return render(request,'upload.html',{'formulario_ingreso':formulario_ingreso})
+
+def RegistrarLocutorView(request):
+	if request.method == 'POST':
+		form_lista_locutor = forms.FormListaLocutor(data=request.POST)
+		if form_lista_locutor.is_valid():
+			formulario = form_lista_locutor.save(commit=False)
+			formulario.id_administrador = request.user
+			formulario.save()
+			locutores = ListaLocutores.objects.filter(id_administrador = request.user)
+			form_lista_locutor = forms.FormListaLocutor()
+			return render(request, 'crear_lista_locutores.html', {'form_lista_locutor':form_lista_locutor, 'locutores':locutores})
+	else:
+		locutores = ListaLocutores.objects.filter(id_administrador = request.user)
+		form_lista_locutor = forms.FormListaLocutor()
+	return render(request,'crear_lista_locutores.html',{'form_lista_locutor':form_lista_locutor, 'locutores':locutores})
+
+
+def EnviarCorreoListaView(request, id_concurso):
+	print("Estoy en EnviarCorreoListaView con el metodo", request.method )
+	if request.method == 'POST':
+		form_mensaje = forms.FormEnviarCorreo(data=request.POST)
+		print("Formulario correo valido? : ", form_mensaje.is_valid())
+		locutores = ListaLocutores.objects.all().filter(id_administrador = request.user)
+		print(locutores.count())
+		for indice in range(len(locutores)):
+			print('Se enviara el concurso a : ',locutores[indice].email)
+
+		if form_mensaje.is_valid():
+			#para = request.POST.get('para')
+			asunto = request.POST.get('asunto')
+			mensaje = request.POST.get('mensaje')
+			for indice in range(len(locutores)):
+				email = EmailMessage(
+							    asunto, 
+							    mensaje, 
+							    to=[locutores[indice].email],
+								)
+				email.send()
+			return redirect('WebConcursos:lista_concursos')
+	else:
+		print('id_concurso', id_concurso)
+		concurso = Concurso.objects.all().filter(id = id_concurso)
+		form_mensaje = forms.FormEnviarCorreo()
+	return render(request,'enviar_mail.html',{'form_mensaje':form_mensaje, 'concurso':concurso})
+
+def BorrarLocutorView(request, id_locutor):
+	id_elegido = id_locutor
+	locutor = ListaLocutores.objects.filter(id = id_elegido)
+	locutor.delete()
+	current_user = request.user
+	locutores = ListaLocutores.objects.filter(id_administrador = request.user)
+	form_lista_locutor = forms.FormListaLocutor()
+	return render(request, 'crear_lista_locutores.html', {'form_lista_locutor':form_lista_locutor, 'locutores':locutores})
+
+def CrearHomeView(request):
+	#Crear un div por cada usuario con concursos
+	users = User.objects.all().count()
+	print(users)
+	usuarios = User.objects.all()
+	for indice in range(len(usuarios)):
+		print('Se creara div para : ',usuarios[indice].username)
+
+	return render(request,'home.html',{'usuarios':usuarios })

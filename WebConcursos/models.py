@@ -68,3 +68,8 @@ class Concurso(models.Model):
     fecha_creacion = models.DateTimeField(blank=True, default=timezone.now)     
     estado = models.CharField(null=True,max_length=2000, default='Vigente')
     id_administrador = models.ForeignKey(User,on_delete=models.CASCADE)
+
+class ListaLocutores(models.Model):
+    nombre = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
+    id_administrador = models.ForeignKey(User,on_delete=models.CASCADE)

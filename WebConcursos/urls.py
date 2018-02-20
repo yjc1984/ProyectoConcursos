@@ -6,6 +6,7 @@ from django.urls import path
 app_name = 'WebConcursos'
 
 urlpatterns = [
+	url(r'home/',views.CrearHomeView, name = 'home'),
     url(r'user/login/',views.formulario_ingresar_usuario, name = 'login'),
     url(r'user/logout/',views.logout_view, name = 'logout'),
     url(r'user/signup/',views.form_registrar_usuario, name = 'registro'),
@@ -16,5 +17,8 @@ urlpatterns = [
     url(r'^concursos/editar/(?P<id_concurso>\d+)/$',views.formulario_editar_concurso, name = 'editar'),
     url(r'^concursos/locutor/detalle_concurso/(?P<id_concurso>[\w-]+)/(?P<id_usuario>[\w-]+)/$',views.detalle_concurso_locutor, name = 'detalle_locutor'),
 	url(r'url/(?P<url_usuario>[\w:/.@+-]+)', views.resolver_url, name='resolver'),
+	url(r'user/crearlocutorlista/',views.RegistrarLocutorView, name = 'crear_locutor_lista'),
+	url(r'^enviaremail/(?P<id_concurso>\d+)/$',views.EnviarCorreoListaView, name = 'enviaremail'),
+	url(r'^locutor/borrar/(?P<id_locutor>\d+)/$',views.BorrarLocutorView, name = 'borrar_locutor'),
 
 ]

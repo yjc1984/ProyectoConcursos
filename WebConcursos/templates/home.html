@@ -1,0 +1,10 @@
+{% extends 'base_layout.html' %}
+
+{% block content%}
+  <h1>Este es el home</h1>
+   {% for usuario in usuarios  %}
+   <div>
+   	 {{usuario.username}}
+   </div>  
+  {% endfor %}
+{% endblock%}

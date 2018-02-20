@@ -66,3 +66,13 @@ class FormEditarConcurso(forms.ModelForm):
 		'recomendaciones' :  forms.Textarea(attrs={'rows':10, 'cols':50}),
 
 		}
+
+class FormListaLocutor(forms.ModelForm):
+    class Meta:
+        model = models.ListaLocutores
+        fields = ['nombre','email']
+
+class FormEnviarCorreo(forms.Form):
+        fields = ['asunto','mensaje']
+        asunto = forms.CharField(max_length=500)
+        mensaje = forms.CharField(widget=forms.Textarea)

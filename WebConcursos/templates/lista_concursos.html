@@ -12,6 +12,7 @@
             <th>Nombre Concurso</th>
             <th>Borrar Concurso</th>
             <th>Editar Concurso</th>
+            <th>Mensaje a Locutores</th>
           </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
               <td><a href="{% url 'WebConcursos:detalle_concurso' id_concurso=concurso.id %}">{{ concurso.nombre }}</a></td>
               <td><a href="{% url 'WebConcursos:borrar' id_concurso=concurso.id %}">Borrar</a></td>
               <td><a href="{% url 'WebConcursos:editar' id_concurso=concurso.id %}">Editar</a></td>
+              <td><a href="{% url 'WebConcursos:enviaremail' id_concurso=concurso.id %}">Enviar email</a><p>Envie este concurso a su lista de locutores<p></td>
           {% endfor %}
         </tbody>
       </table>
@@ -34,7 +36,9 @@
         {% csrf_token %}
         <input class="btn btn-primary my-2" type='submit' value='Logout'/>
       </form>
+      <form method='get' action="{% url 'WebConcursos:crear_locutor_lista' %}">
+        {% csrf_token %}
+        <input class="btn btn-primary my-2" type='submit' value='Crear Locutor en Lista'/>
+      </form>
     </div>
 {% endblock%}
-<!--  </body>
-</html>-->

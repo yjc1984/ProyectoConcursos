@@ -225,5 +225,4 @@ def CrearHomeView(request):
 	usuarios = User.objects.all()
 	for indice in range(len(usuarios)):
 		print('Se creara div para : ',usuarios[indice].username)
-
 	return render(request,'home.html',{'usuarios':usuarios })

@@ -106,7 +106,7 @@ def traer_detalle_concurso(request, id_concurso):
 
 
 def formulario_editar_concurso(request, id_concurso):
-	print("metodo a editar", request.method)
+	print("metodo  formulario_editar_concurso ", request.method)
 	if request.method == 'POST':
 		formulario_edicion = forms.FormEditarConcurso(data=request.POST)
 		print("formulario valido",formulario_edicion.is_valid())
@@ -116,7 +116,7 @@ def formulario_editar_concurso(request, id_concurso):
 			concurso.id = id_concurso
 			concurso.id_administrador = request.user
 			concurso.url_concurso = 'http://localhost:8000/concursos/locutor/detalle_concurso/'
-			#concurso.ruta_imagen = 'http://localhost:8000/media/media/' + request.POST.get('ruta_imagen')
+			concurso.ruta_imagen = 'http://localhost:8000/media/media/' + request.POST.get('ruta_imagen')
 			concurso.save()
 			concurso.url_concurso = 'http://localhost:8000/concursos/locutor/detalle_concurso/'+ str(concurso.id) + '/' + str(concurso.id_administrador.id)
 			concurso.save()
@@ -221,8 +221,11 @@ def BorrarLocutorView(request, id_locutor):
 def CrearHomeView(request):
 	#Crear un div por cada usuario con concursos
 	users = User.objects.all().count()
+	concursos = Concurso.objects.all().count()
 	print(users)
+	print(concursos)
 	usuarios = User.objects.all()
+	concursos = Concurso.objects.all()
 	for indice in range(len(usuarios)):
 		print('Se creara div para : ',usuarios[indice].username)
-	return render(request,'home.html',{'usuarios':usuarios })
+	return render(request,'home.html',{'usuarios':usuarios ,'concursos':concursos})

@@ -2,7 +2,7 @@
 {% block content%}
     <h1>Edicion del Concurso</h1>
 
-  {% for concurso in concurso  %}
+  {% for concurso in concursos  %}
 
   <form id ='form_editar' method='POST' action="{% url 'WebConcursos:editar' id_concurso=concurso.id %}">
       {% csrf_token %}

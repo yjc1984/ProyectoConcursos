@@ -3,9 +3,11 @@
     <h1>Detalle del Concurso</h1>
 
 {% for concurso in concurso %}
+{% load staticfiles  %}
     <div>
       <center>
-          <img src="{{concurso.ruta_imagen}}">
+         <!-- <img src="{{concurso.ruta_imagen.url}}">-->
+         <img src={% static concurso.ruta_imagen.url %}>
       </center>
     </div>
     <div>
@@ -29,7 +31,7 @@
           <tr>
           <tr>
             <th>Imagen Banner</th>
-            <td>{{ concurso.ruta_imagen}}</td>
+            <td>{{ concurso.ruta_imagen.url}}</td>
           <tr>
           <tr>
             <th>Texto Voz</th>

@@ -11,6 +11,7 @@ from django.contrib import messages
 from .models import Concurso, UsuarioCustom, ListaLocutores
 from WebConcursos.forms import UserCreationCustom
 from django.core.mail import EmailMessage, send_mail
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 #registrar usuarios: metodo usado para crear el usuario en la aplicacion
@@ -108,20 +109,17 @@ def traer_detalle_concurso(request, id_concurso):
 def formulario_editar_concurso(request, id_concurso):
 	print("metodo  formulario_editar_concurso ", request.method)
 	if request.method == 'POST':
-		formulario_edicion = forms.FormEditarConcurso(data=request.POST)
-		print("formulario valido",formulario_edicion.is_valid())
-		print("request.POST", request.POST)
+		formulario_edicion = forms.FormEditarConcurso(request.POST, request.FILES)
 		if formulario_edicion.is_valid():
 			concurso = formulario_edicion.save(commit=False)
 			concurso.id = id_concurso
 			concurso.id_administrador = request.user
 			concurso.url_concurso = 'http://localhost:8000/concursos/locutor/detalle_concurso/'
-			concurso.ruta_imagen = 'http://localhost:8000/media/media/' + request.POST.get('ruta_imagen')
+			print(concurso.ruta_imagen.url)
 			concurso.save()
 			concurso.url_concurso = 'http://localhost:8000/concursos/locutor/detalle_concurso/'+ str(concurso.id) + '/' + str(concurso.id_administrador.id)
 			concurso.save()
-			url_usuario = concurso.url_concurso_custom
-			concurso.url_concurso_custom = str(url_usuario)
+			concurso.url_concurso_custom = str(concurso.url_concurso_custom)
 			concurso.save()
 			return redirect('WebConcursos:lista_concursos' ) #despues de guardarlo, envio al usuario a la lista de eventos
 	else:

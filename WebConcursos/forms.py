@@ -76,3 +76,12 @@ class FormEnviarCorreo(forms.Form):
         fields = ['asunto','mensaje']
         asunto = forms.CharField(max_length=500)
         mensaje = forms.CharField(widget=forms.Textarea)
+
+
+
+
+#opcion para seguir con usuario que maneja empresa y rol
+class UserCreationEmpresa(UserCreationForm):
+    class Meta:
+        model = UsuarioCustom
+        fields = ('first_name','last_name','Empresa','Rol','username','password1','password2',)

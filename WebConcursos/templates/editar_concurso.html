@@ -4,7 +4,7 @@
 
   {% for concurso in concursos  %}
 
-  <form id ='form_editar' method='POST' action="{% url 'WebConcursos:editar' id_concurso=concurso.id %}">
+  <form id ='form_editar' method='POST' action="{% url 'WebConcursos:editar' id_concurso=concurso.id %}" enctype="multipart/form-data">
       {% csrf_token %}
       {{formulario_edicion.errors.as_data}}
       <div>

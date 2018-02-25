@@ -9,7 +9,7 @@ que quiero para cada template-->
        {% csrf_token %}
        {{formulario_ingreso}}
        <p><input class="btn btn-primary my-2" type='submit' value='Ingresar'/></p>
-       <p><a href="http://localhost:8000/user/signup/">¿No estas registrado?...registrate!!!</a></p>
+   
     </form>
     {% if messages %}
 	    {% for message in messages %}

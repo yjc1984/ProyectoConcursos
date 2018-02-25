@@ -7,7 +7,7 @@
     <div>
       <center>
          <!-- <img src="{{concurso.ruta_imagen.url}}">-->
-         <img src={% static concurso.ruta_imagen.url %}>
+         <img src={% static concurso.ruta_imagen.url %} width="300" height="200">
       </center>
     </div>
     <div>
@@ -28,10 +28,6 @@
           <tr>
             <th>Valor Pagar</th>
             <td>{{ concurso.valor_pagar }}</td>
-          <tr>
-          <tr>
-            <th>Imagen Banner</th>
-            <td>{{ concurso.ruta_imagen.url}}</td>
           <tr>
           <tr>
             <th>Texto Voz</th>

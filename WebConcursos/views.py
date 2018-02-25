@@ -67,7 +67,7 @@ def logout_view(request):
 def formulario_crear_concurso(request):
 	print(request.method)
 	if request.method == 'POST':
-		formulario_crear = forms.FormCrearConcurso(data=request.POST)
+		formulario_crear = forms.FormCrearConcurso(request.POST, request.FILES)
 		print(formulario_crear.errors)
 		if formulario_crear.is_valid():
 			print("Request para crear concurso", request.POST)
@@ -100,9 +100,11 @@ def borrar_concurso(request, id_concurso):
 	concursos = Concurso.objects.filter(id_administrador = request.user).order_by('fecha_inicio')
 	return render(request, 'lista_concursos.html', {'concursos':concursos})
 
+
+
 def traer_detalle_concurso(request, id_concurso):
 	id_elegido = id_concurso
-	concurso = Concurso.objects.filter(id = id_elegido)
+	concurso = Concurso.objects.all().filter(id = id_elegido)
 	return render(request, 'detalle_concurso.html', {'concurso':concurso})
 
 
